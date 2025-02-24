@@ -2,7 +2,8 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 
-def calculate_bmi(weight, height_cm):
+def calculate_bmi(weight, height_ft, height_inch):
+    height_cm = (height_ft * 30.48) + (height_inch * 2.54)  # Convert feet and inches to cm
     height_m = height_cm / 100  # Convert cm to meters
     bmi = weight / (height_m ** 2)
     return round(bmi, 2)
@@ -22,10 +23,11 @@ st.title("🏋️ BMI Calculator")
 st.write("Calculate your Body Mass Index (BMI) and check your health status.")
 
 weight = st.slider("Select your weight (kg):", 30, 150, 70)
-height_cm = st.slider("Select your height (cm):", 120, 220, 170, step=1)
+height_ft = st.slider("Select your height (feet):", 4, 7, 5)
+height_inch = st.slider("Select your height (inches):", 0, 11, 6)
 
 if st.button("Calculate BMI"):
-    bmi = calculate_bmi(weight, height_cm)
+    bmi = calculate_bmi(weight, height_ft, height_inch)
     category, color = classify_bmi(bmi)
     
     st.markdown(f"<h2 style='color:{color};'>Your BMI: {bmi} ({category})</h2>", unsafe_allow_html=True)
